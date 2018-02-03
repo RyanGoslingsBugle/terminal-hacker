@@ -9,6 +9,8 @@ public class Hacker : MonoBehaviour {
     int level;
     enum Screen { Menu, Password, Win };
     Screen currentScreen = Screen.Menu;
+    string[] passwords = { "pint", "caviar", "washington" };
+    string currentPassword;
 
 	// Use this for initialization
 	void Start ()
@@ -20,34 +22,49 @@ public class Hacker : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-		
+
 	}
 
     // Called when user confirms input - pass input to handlers
     void OnUserInput(string input)
     {
-        if (input == "exit" || input == "Exit")
+        if (!string.IsNullOrEmpty(input))
         {
-            UnityEditor.EditorApplication.isPlaying = false;
-            Application.Quit();
-        }
-        else if (input == "menu" || input == "Menu")
-        {
-            MainMenu();
-        }
-        else if (currentScreen == Screen.Menu)
-        {
-            MenuHandler(input);
-        }
-        else if (currentScreen == Screen.Password)
-        {
-            PassHandler(input);
+            if (input.ToLower() == "exit")
+            {
+                UnityEditor.EditorApplication.isPlaying = false;
+                Application.Quit();
+            }
+            else if (input.ToLower() == "menu")
+            {
+                MainMenu();
+            }
+            else if (currentScreen == Screen.Menu)
+            {
+                MenuHandler(input);
+            }
+            else if (currentScreen == Screen.Password)
+            {
+                PassHandler(input);
+            }
         }
     }
 
     // Handle inputs on password guess screen
     void PassHandler(string input)
     {
+        if (input.ToLower() == currentPassword.ToLower())
+        {
+            Terminal.WriteLine("");
+            Terminal.WriteLine("Excellent!");
+            Terminal.WriteLine("Those security techs will regret");
+            Terminal.WriteLine("they were ever born!");
+        } else
+        {
+            Terminal.WriteLine("");
+            Terminal.WriteLine("Oh well, can't all be winners.");
+            Terminal.WriteLine("Go on, try again:");
+        }
     }
 
     // Handle inputs on main menu
@@ -77,8 +94,10 @@ public class Hacker : MonoBehaviour {
     void StartGame()
     {
         currentScreen = Screen.Password;
+        currentPassword = passwords[level - 1];
         Terminal.ClearScreen();
         Terminal.WriteLine("Thanks for selecting access level " + level);
+        Terminal.WriteLine("Please enter your password.");
         Terminal.WriteLine("Type menu to return to level select");
         Terminal.WriteLine("");
         Terminal.WriteLine("Waiting for your input: ");
