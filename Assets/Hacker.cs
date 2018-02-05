@@ -29,7 +29,6 @@ public class Hacker : MonoBehaviour
         {
             if (input.ToLower() == "exit")
             {
-                UnityEditor.EditorApplication.isPlaying = false;
                 Application.Quit();
             }
             else if (input.ToLower() == "menu")
