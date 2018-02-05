@@ -98,7 +98,7 @@ public class Hacker : MonoBehaviour {
     void StartGame()
     {
         currentScreen = Screen.Password;
-        currentPassword = passwords[level - 1, 0];
+        currentPassword = passwords[level - 1, UnityEngine.Random.Range(0, passwords.GetLength(1))];
         Terminal.ClearScreen();
         Terminal.WriteLine("Thanks for selecting access level " + level);
         Terminal.WriteLine("Please enter your password.");
