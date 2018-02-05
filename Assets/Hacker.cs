@@ -27,46 +27,6 @@ public class Hacker : MonoBehaviour
 
     }
 
-    // Display main menu screen
-    void MainMenu(string greeting = "")
-    {
-        currentScreen = Screen.Menu;
-        Terminal.ClearScreen();
-        if (greeting.Length > 0)
-        {
-            Terminal.WriteLine(greeting);
-        }
-        Terminal.WriteLine("Do you want to play a game?");
-        Terminal.WriteLine("Not global thermonuclear war, promise.");
-        Terminal.WriteLine("");
-        Terminal.WriteLine("Enter 1 to snoop on MI5");
-        Terminal.WriteLine("Enter 2 to gather data on the FSB");
-        Terminal.WriteLine("Enter 3 to penetrate the NSA network");
-        Terminal.WriteLine("");
-        Terminal.WriteLine("Your choice: ");
-    }
-
-    // Called when level is selected on main menu
-    void StartGame()
-    {
-        currentScreen = Screen.Password;
-        currentPassword = passwords[level - 1, Random.Range(0, passwords.GetLength(1))];
-        Terminal.ClearScreen();
-        Terminal.WriteLine("Thanks for selecting access level " + level);
-        Terminal.WriteLine("Please enter your password.");
-        Terminal.WriteLine("Type menu to return to level select");
-        Terminal.WriteLine("");
-        Terminal.WriteLine("Waiting for your input: ");
-    }
-
-    // Called when correct password entered
-    void Winner()
-    {
-        currentScreen = Screen.Win;
-        Terminal.ClearScreen();
-        WinHandler();
-    }
-
     // Called when user confirms input - pass input to handlers
     void OnUserInput(string input)
     {
@@ -92,6 +52,25 @@ public class Hacker : MonoBehaviour
         }
     }
 
+    // Display main menu screen
+    void MainMenu(string greeting = "")
+    {
+        currentScreen = Screen.Menu;
+        Terminal.ClearScreen();
+        if (greeting.Length > 0)
+        {
+            Terminal.WriteLine(greeting);
+        }
+        Terminal.WriteLine("Do you want to play a game?");
+        Terminal.WriteLine("Not global thermonuclear war, promise.");
+        Terminal.WriteLine("");
+        Terminal.WriteLine("Enter 1 to snoop on MI5");
+        Terminal.WriteLine("Enter 2 to gather data on the FSB");
+        Terminal.WriteLine("Enter 3 to penetrate the NSA network");
+        Terminal.WriteLine("");
+        Terminal.WriteLine("Your choice: ");
+    }
+
     // Handle inputs on main menu
     void MenuHandler(string input)
     {
@@ -101,7 +80,7 @@ public class Hacker : MonoBehaviour
             case "2":
             case "3":
                 level = int.Parse(input);
-                StartGame();
+                GameScreen();
                 break;
 
             case "007":
@@ -114,25 +93,48 @@ public class Hacker : MonoBehaviour
         }
     }
 
+    // Called when level is selected on main menu
+    void GameScreen()
+    {
+        currentScreen = Screen.Password;
+        PasswordGen();
+        Terminal.ClearScreen();
+        Terminal.WriteLine("Type menu to return to level select");
+        Terminal.WriteLine("Enter password, hint " + currentPassword.Anagram() + ": ");
+    }
+
+    // Generate new random password
+    void PasswordGen()
+    {
+        currentPassword = passwords[level - 1, Random.Range(0, passwords.GetLength(1))];
+    }
+
     // Handle inputs on password guess screen
     void PassHandler(string input)
     {
         if (input.ToLower() == currentPassword.ToLower())
         {
-            Winner();
+            WinScreen();
         }
         else
         {
-            Terminal.WriteLine("");
-            Terminal.WriteLine("Oh well, can't all be winners.");
-            Terminal.WriteLine("Go on, try again:");
+            GameScreen();
         }
+    }
+
+    // Called when correct password entered
+    void WinScreen()
+    {
+        currentScreen = Screen.Win;
+        Terminal.ClearScreen();
+        WinHandler();
+        Terminal.WriteLine("Type menu to return to level select");
     }
 
     // Handle logic for win screen
     void WinHandler()
     {
-        switch(level)
+        switch (level)
         {
             case 1:
                 Terminal.WriteLine("Excellent!");
@@ -151,12 +153,11 @@ public class Hacker : MonoBehaviour
                 Terminal.WriteLine("Cold War? More like old snore.");
                 Terminal.WriteLine(@"
                 -..
-            //     ))
+            //    ))
            //\  . _.'
           '/ \\//~
               \\
              //\\
-             '  '
                 ");
                 break;
             case 3:
@@ -172,7 +173,7 @@ public class Hacker : MonoBehaviour
                 ");
                 break;
             default:
-                Debug.LogError("Error in WinHandler");
+                Debug.LogError("Error in WinHandler, no level value");
                 break;
         }
     }
