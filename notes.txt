@@ -1,23 +1,23 @@
 easy: mi5
 
-chum
-pint
-football
-rain
-ascot
+"chum", 
+"pint", 
+"football", 
+"rain", 
+"ascot"
 
 medium: fsb
 
-vodka
-kremlin
-makarov
-caviar
-borscht
+"vodka", 
+"kremlin", 
+"makarov", 
+"caviar", 
+"borscht" 
 
 hard: nsa
 
-benghazi
-phosphorus
-predator
-washington
-obamacare
+"benghazi", 
+"phosphorus", 
+"predator", 
+"washington", 
+"obamacare"

@@ -5,11 +5,15 @@ using UnityEngine;
 
 public class Hacker : MonoBehaviour {
 
-    // Member vars
-    int level;
+    // Config vars
     enum Screen { Menu, Password, Win };
+    string[,] passwords = new string[3, 5]{ {"chum", "pint", "football", "rain", "ascot" },
+        { "vodka", "kremlin", "makarov", "caviar", "borscht"  },
+        { "benghazi", "phosphorus", "predator", "washington", "obamacare" } };
+
+    // State vars
+    int level;
     Screen currentScreen = Screen.Menu;
-    string[] passwords = { "pint", "caviar", "washington" };
     string currentPassword;
 
 	// Use this for initialization
@@ -94,7 +98,7 @@ public class Hacker : MonoBehaviour {
     void StartGame()
     {
         currentScreen = Screen.Password;
-        currentPassword = passwords[level - 1];
+        currentPassword = passwords[level - 1, 0];
         Terminal.ClearScreen();
         Terminal.WriteLine("Thanks for selecting access level " + level);
         Terminal.WriteLine("Please enter your password.");
