@@ -4,6 +4,7 @@ public class Hacker : MonoBehaviour
 {
 
     // Config vars
+    const string menuFlag = "Type menu to return to level select";
     enum Screen { Menu, Password, Win };
     string[,] passwords = new string[3, 5]{ {"chum", "pint", "football", "rain", "ascot" },
         { "vodka", "kremlin", "makarov", "caviar", "borscht"  },
@@ -19,12 +20,6 @@ public class Hacker : MonoBehaviour
     {
         string greeting = "Welcome User:[Rich]";
         MainMenu(greeting);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     // Called when user confirms input - pass input to handlers
@@ -99,7 +94,8 @@ public class Hacker : MonoBehaviour
         currentScreen = Screen.Password;
         PasswordGen();
         Terminal.ClearScreen();
-        Terminal.WriteLine("Type menu to return to level select");
+        Terminal.WriteLine(menuFlag);
+        DrawLevelArt();
         Terminal.WriteLine("Enter password, hint " + currentPassword.Anagram() + ": ");
     }
 
@@ -107,6 +103,43 @@ public class Hacker : MonoBehaviour
     void PasswordGen()
     {
         currentPassword = passwords[level - 1, Random.Range(0, passwords.GetLength(1))];
+    }
+
+    // Draw ascii for title
+    void DrawLevelArt()
+    {
+        switch (level)
+        {
+            case 1:
+                Terminal.WriteLine(@"
+         __  __ ___ ___ 
+        |  \/  |_ _| __|
+        | |\/| || ||__ \
+        |_|  |_|___|___/
+                ");
+                break;
+            case 2:
+                Terminal.WriteLine(@"
+        ______ ______  ______    
+       /\  ___/\  ___\/\  == \   
+       \ \  __\ \___  \ \  __<   
+        \ \_\  \/\_____\ \_____\ 
+         \/_/   \/_____/\/_____/        
+                ");
+                break;
+            case 3:
+                Terminal.WriteLine(@"
+            _   _______ ___ 
+           / | / / ___//   |
+          /  |/ /\__ \/ /| |
+         / /|  /___/ / ___ |
+        /_/ |_//____/_/  |_|
+                ");
+                break;
+            default:
+                Debug.LogError("Error in game screen draw call, no level.");
+                break;
+        }
     }
 
     // Handle inputs on password guess screen
@@ -128,7 +161,7 @@ public class Hacker : MonoBehaviour
         currentScreen = Screen.Win;
         Terminal.ClearScreen();
         WinHandler();
-        Terminal.WriteLine("Type menu to return to level select");
+        Terminal.WriteLine(menuFlag);
     }
 
     // Handle logic for win screen
